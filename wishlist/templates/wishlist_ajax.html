@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {% block content %}
+
+<nav class="navbar navbar-expand-lg bg-light">
+  <div class="container-fluid">
+    <div>
+      <a class="navbar-brand" href="#">Hello, {{user.get_username}}</a>
+      <span>Last Login: {{ last_login }}</span>
+    </div>
+    <a href="{% url 'wishlist:generate_wishlist' %}" class="btn btn-success"
+      >Add Task</a
+    >
+    <a href="{% url 'wishlist:logout' %}" class="btn btn-danger">Logout</a>
+  </div>
+</nav>
+
+<div class="w-100 d-flex justify-content-center">
+  <table class="table table-hover">
+    <thead class="table-dark">
+      <th>Nama Barang</th>
+      <th>Harga Barang</th>
+      <th>Deskripsi</th>
+    </thead>
+    {% comment %} Tambahkan data di bawah baris ini {% endcomment %}
+    <tbody id="table-body"></tbody>
+  </table>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $.get('/wishlist/json', function (data) {
+      data.map((singleData) =>
+        $('#table-body').append(`<tr>
+    <td>${singleData.fields.nama_barang}</td>
+    <td>${singleData.fields.harga_barang}</td>
+    <td>${singleData.fields.deskripsi}</td>
+  </tr>`)
+      );
+    });
+  });
+</script>
+
+{% endblock content %}
